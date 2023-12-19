@@ -9,7 +9,7 @@
  * project file last modified : 4/24/21 3:17 PM
  */
 
-package org.rmj.guanzongroup.authentication.UserInterface.CreateAccount;
+package org.rmj.guanzongroup.authentication.Callback;
 
 public interface CreateAccountCallBack {
     void OnAccountLoad(String Title, String Message);

@@ -8,7 +8,7 @@
  * project file created : 4/24/21 3:19 PM
  * project file last modified : 4/24/21 3:17 PM
  */
-package org.rmj.guanzongroup.authentication.UserInterface.Login;
+package org.rmj.guanzongroup.authentication.ViewModel;
 
 import static org.rmj.g3appdriver.etc.AppConstants.getLocalMessage;
 
@@ -27,6 +27,7 @@ import org.rmj.g3appdriver.lib.Account.Model.iAuth;
 import org.rmj.g3appdriver.lib.Account.pojo.UserAuthInfo;
 import org.rmj.g3appdriver.utils.Task.OnTaskExecuteListener;
 import org.rmj.g3appdriver.utils.Task.TaskExecutor;
+import org.rmj.guanzongroup.authentication.Callback.LoginCallback;
 
 public class VMLogin extends AndroidViewModel {
     public static final String TAG =  VMLogin.class.getSimpleName();

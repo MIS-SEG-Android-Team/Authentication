@@ -17,8 +17,8 @@ import org.rmj.g3appdriver.etc.LoadDialog;
 import org.rmj.g3appdriver.etc.MessageBox;
 import org.rmj.g3appdriver.lib.Account.pojo.UserAuthInfo;
 import org.rmj.guanzongroup.authentication.R;
-import org.rmj.guanzongroup.authentication.UserInterface.Login.LoginCallback;
-import org.rmj.guanzongroup.authentication.UserInterface.Login.VMLogin;
+import org.rmj.guanzongroup.authentication.Callback.LoginCallback;
+import org.rmj.guanzongroup.authentication.ViewModel.VMLogin;
 
 import java.util.Objects;
 

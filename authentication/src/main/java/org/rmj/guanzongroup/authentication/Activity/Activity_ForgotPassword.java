@@ -16,7 +16,7 @@ import org.rmj.g3appdriver.etc.AppConfigPreference;
 import org.rmj.g3appdriver.etc.LoadDialog;
 import org.rmj.g3appdriver.etc.MessageBox;
 import org.rmj.guanzongroup.authentication.R;
-import org.rmj.guanzongroup.authentication.UserInterface.ForgotPassword.VMForgotPassword;
+import org.rmj.guanzongroup.authentication.ViewModel.VMForgotPassword;
 
 import java.util.Objects;
 

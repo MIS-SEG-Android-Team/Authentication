@@ -71,7 +71,7 @@ dependencies {
 
     // Core library
     androidTestImplementation 'androidx.test:core:1.5.0'
-    implementation 'com.github.MIS-SEG-Android-Team:app_driver:v.1.05'
+    implementation 'com.github.MIS-SEG-Android-Team:app_driver:v.1.09'
 }
 
 afterEvaluate{
