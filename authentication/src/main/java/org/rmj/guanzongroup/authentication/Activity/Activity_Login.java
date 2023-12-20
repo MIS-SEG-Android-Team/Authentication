@@ -12,10 +12,11 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textview.MaterialTextView;
 
-import org.rmj.g3appdriver.etc.AppConfigPreference;
+import org.rmj.g3appdriver.Config.AppStatusConfig;
+import org.rmj.g3appdriver.Config.AppVersionConfig;
 import org.rmj.g3appdriver.etc.LoadDialog;
 import org.rmj.g3appdriver.etc.MessageBox;
-import org.rmj.g3appdriver.lib.Account.pojo.UserAuthInfo;
+import org.rmj.g3appdriver.lib.authentication.pojo.LoginCredentials;
 import org.rmj.guanzongroup.authentication.R;
 import org.rmj.guanzongroup.authentication.Callback.LoginCallback;
 import org.rmj.guanzongroup.authentication.ViewModel.VMLogin;
@@ -32,7 +33,7 @@ public class Activity_Login extends AppCompatActivity implements LoginCallback {
     private MaterialButton btn_log;
     private VMLogin mViewModel;
     private LoadDialog podialog;
-    private AppConfigPreference poConfigx;
+    private AppVersionConfig poAppVersion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +42,9 @@ public class Activity_Login extends AppCompatActivity implements LoginCallback {
 
         mViewModel = new ViewModelProvider(this).get(VMLogin.class);
         podialog = new LoadDialog(this);
-        poConfigx = AppConfigPreference.getInstance(this);
+        poAppVersion = AppVersionConfig.getInstance(this);
+
+        AppStatusConfig.getInstance(this).setTestStatus(true);
 
         tie_username = findViewById(R.id.username);
         tie_password = findViewById(R.id.password);
@@ -54,18 +57,18 @@ public class Activity_Login extends AppCompatActivity implements LoginCallback {
         tie_mobileno.setText(mViewModel.getMobileNo());
         tie_mobileno.setVisibility(mViewModel.hasMobileNo());
 
+        lblVersion.setText(poAppVersion.getVersionName()); //display app version
         btn_log.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String email = Objects.requireNonNull(tie_username.getText()).toString();
                 String password = Objects.requireNonNull(tie_password.getText()).toString();
                 String mobileno = Objects.requireNonNull(tie_mobileno.getText()).toString();
-                mViewModel.Login(new UserAuthInfo(email,password, mobileno), Activity_Login.this);
+
+                //start login session
+                mViewModel.Login(new LoginCredentials(email,password, mobileno), Activity_Login.this);
             }
         });
-
-        lblVersion.setText(poConfigx.getVersionInfo());
-
         mtv_createaccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,29 +84,28 @@ public class Activity_Login extends AppCompatActivity implements LoginCallback {
             }
         });
     }
-
     @Override
     public void OnAuthenticationLoad(String Title, String Message) {
         podialog.initDialog(Title, Message, false);
         podialog.show();
     }
-
     @Override
     public void OnSuccessLoginResult() {
         podialog.dismiss();
+
         Intent loIntent = new Intent();
         this.setResult(Activity.RESULT_OK, loIntent);
         this.finish();
     }
-
     @Override
     public void OnFailedLoginResult(String message) {
         podialog.dismiss();
+
         MessageBox loMessage = new MessageBox(this);
         loMessage.initDialog();
-        loMessage.setTitle("G-Sec");
+        loMessage.setTitle("Telemarketing App");
         loMessage.setMessage(message);
-        loMessage.setPositiveButton("Okay", (view, dialog) -> dialog.dismiss());
+        loMessage.setPositiveButton("Dismiss", (view, dialog) -> dialog.dismiss());
         loMessage.show();
     }
 }

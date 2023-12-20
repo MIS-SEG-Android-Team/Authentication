@@ -10,8 +10,6 @@
  */
 package org.rmj.guanzongroup.authentication.ViewModel;
 
-import static org.rmj.g3appdriver.etc.AppConstants.getLocalMessage;
-
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.view.View;
@@ -19,57 +17,63 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
+import org.rmj.g3appdriver.Config.AppConfig;
+import org.rmj.g3appdriver.Config.DeviceConfig;
 import org.rmj.g3appdriver.dev.Device.Telephony;
-import org.rmj.g3appdriver.etc.AppConfigPreference;
-import org.rmj.g3appdriver.lib.Account.AccountMaster;
-import org.rmj.g3appdriver.lib.Account.Model.Auth;
-import org.rmj.g3appdriver.lib.Account.Model.iAuth;
-import org.rmj.g3appdriver.lib.Account.pojo.UserAuthInfo;
+import org.rmj.g3appdriver.lib.authentication.GAuthentication;
+import org.rmj.g3appdriver.lib.authentication.factory.Auth;
+import org.rmj.g3appdriver.lib.authentication.factory.iAuthenticate;
+import org.rmj.g3appdriver.lib.authentication.pojo.LoginCredentials;
+import org.rmj.g3appdriver.utils.ConnectionUtil;
 import org.rmj.g3appdriver.utils.Task.OnTaskExecuteListener;
 import org.rmj.g3appdriver.utils.Task.TaskExecutor;
 import org.rmj.guanzongroup.authentication.Callback.LoginCallback;
 
 public class VMLogin extends AndroidViewModel {
     public static final String TAG =  VMLogin.class.getSimpleName();
-    private final AppConfigPreference poConfig;
+    private final AppConfig poConfig;
+    private final ConnectionUtil poConn;
+    private final GAuthentication poAccount;
+    private final iAuthenticate poSys;
+    private DeviceConfig poDevConfig;
     private final Telephony poTlphony;
-    private final iAuth poSys;
-
     private String message;
 
     public VMLogin(@NonNull Application application) {
         super(application);
-        this.poSys = new AccountMaster(application).initGuanzonApp().getInstance(Auth.AUTHENTICATE);
-        poConfig = AppConfigPreference.getInstance(application);
-        poTlphony = new Telephony(application);
-    }
 
+        this.poConfig = AppConfig.getInstance(application);
+        this.poConn = new ConnectionUtil(application);
+
+        this.poDevConfig = DeviceConfig.getInstance(application);
+        this.poTlphony = new Telephony(application);
+
+        this.poAccount = new GAuthentication(application);
+        this.poSys = poAccount.initAppAuthentication().getInstance(Auth.AUTHENTICATE);
+    }
     @SuppressLint("NewApi")
     public String getMobileNo(){
-        if(poConfig.getMobileNo().isEmpty()) {
-            return poTlphony.getMobilNumbers();
+        if(poDevConfig.getMobileNO().isEmpty()) {
+            return poTlphony.getMobilNumbers(); //returns device mobile number
         } else {
-            return poConfig.getMobileNo();
+            return poDevConfig.getMobileNO(); //returns config mobile no
         }
     }
-
     public int hasMobileNo(){
-        if(poConfig.getMobileNo().equalsIgnoreCase("")) {
+        if(poDevConfig.getMobileNO().equalsIgnoreCase("")) {
             return View.VISIBLE;
         }
         return View.GONE;
     }
-
     public boolean isAgreed(){
-        return poConfig.isAgreedOnTermsAndConditions();
+        return poConfig.hasAgreedTermsAndConditions();
     }
-
     public void setAgreedOnTerms(boolean isAgreed){
-        poConfig.setAgreement(isAgreed);
+        poConfig.setAppAgreement(isAgreed);
     }
 
-    public void Login(UserAuthInfo authInfo, LoginCallback callback){
-        TaskExecutor.Execute(authInfo, new OnTaskExecuteListener() {
+    public void Login(LoginCredentials loginCredentials, LoginCallback callback){
+        TaskExecutor.Execute(loginCredentials, new OnTaskExecuteListener() {
             @Override
             public void OnPreExecute() {
                 callback.OnAuthenticationLoad("Guanzon Circle", "Authenticating to ghostrider app. Please wait...");
@@ -77,24 +81,17 @@ public class VMLogin extends AndroidViewModel {
 
             @Override
             public Object DoInBackground(Object args) {
-                try{
-                    int lnResult = poSys.DoAction(args);
-                    if(lnResult == 0){
-                        message = poSys.getMessage();
-                        return false;
-                    }
+                /*if(!poConn.isDeviceConnected()){
+                    message = poConn.getMessage();
+                    return false;
+                }*/
 
-                    if(lnResult == 2){
-                        message = poSys.getMessage();
-                        return false;
-                    }
-
-                    return true;
-                } catch (Exception e){
-                    e.printStackTrace();
-                    message = getLocalMessage(e);
+                int lnResult = poSys.DoAction(args);
+                if (lnResult == 0 || lnResult == 2) {
+                    message = poSys.getMessage();
                     return false;
                 }
+                return true;
             }
 
             @Override

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:id="@+id/scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="203dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                style="@style/GhostRiderMaterialTheme.PopupOverlay"
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/PrimaryHeaderStyle"
+                android:id="@+id/tvCAccUpdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:text="Account Update"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/DescriptionHeaderStyle"
+                android:id="@+id/tvdesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="Mobile Number Update"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvCAccUpdate" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/img_banner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:src="@drawable/img_header_background_light"
+                app:layout_constraintTop_toBottomOf="@+id/tvdesc"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/PrimaryHeaderStyle"
+                android:id="@+id/tvEnterNewMob"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="Enter New Mobile No."
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/img_banner" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/TextInputStyle"
+                android:id="@+id/til_ca_mobileNumber"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_mobile_number"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvEnterNewMob"
+                app:layout_constraintWidth_percent=".900">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tie_ca_mobileNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/TextInputStyle"
+                android:id="@+id/til_ca_otp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Enter OTP"
+                app:layout_constraintStart_toStartOf="@+id/til_ca_mobileNumber"
+                app:layout_constraintTop_toBottomOf="@+id/til_ca_mobileNumber"
+                app:layout_constraintWidth_percent=".500">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tie_ca_otp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_sendotp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Request OTP"
+                android:layout_marginTop="10dp"
+                app:layout_constraintStart_toEndOf="@+id/til_ca_otp"
+                app:layout_constraintEnd_toEndOf="@+id/til_ca_mobileNumber"
+                app:layout_constraintTop_toTopOf="@id/til_ca_otp"
+                app:layout_constraintBottom_toBottomOf="@+id/til_ca_otp"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/DescriptionHeaderStyle"
+                android:id="@+id/tvnotes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Updating your mobile number requires either user verification through SMS OTP or a 24-hour business processing period. Your chosen method will be initiated to ensure the security and accuracy of the change. "
+                android:layout_marginTop="20dp"
+                android:paddingHorizontal="30dp"
+                app:layout_constraintStart_toStartOf="@+id/til_ca_otp"
+                app:layout_constraintEnd_toEndOf="@+id/btn_sendotp"
+                app:layout_constraintTop_toBottomOf="@+id/til_ca_otp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_submit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Submit"
+                android:layout_marginTop="50dp"
+                app:layout_constraintTop_toBottomOf="@+id/tvnotes"
+                app:layout_constraintStart_toStartOf="@+id/til_ca_otp"
+                app:layout_constraintEnd_toEndOf="@+id/btn_sendotp"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

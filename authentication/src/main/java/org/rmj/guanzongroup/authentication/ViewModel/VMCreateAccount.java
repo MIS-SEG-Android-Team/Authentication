@@ -10,18 +10,14 @@
  */
 
 package org.rmj.guanzongroup.authentication.ViewModel;
-
 import static org.rmj.g3appdriver.etc.AppConstants.getLocalMessage;
-
 import android.app.Application;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-
-import org.rmj.g3appdriver.lib.Account.AccountMaster;
-import org.rmj.g3appdriver.lib.Account.Model.Auth;
-import org.rmj.g3appdriver.lib.Account.Model.iAuth;
-import org.rmj.g3appdriver.lib.Account.pojo.AccountInfo;
+import org.rmj.g3appdriver.lib.authentication.GAuthentication;
+import org.rmj.g3appdriver.lib.authentication.factory.Auth;
+import org.rmj.g3appdriver.lib.authentication.factory.iAuthenticate;
+import org.rmj.g3appdriver.lib.authentication.pojo.AccountInfo;
 import org.rmj.g3appdriver.utils.ConnectionUtil;
 import org.rmj.g3appdriver.utils.Task.OnTaskExecuteListener;
 import org.rmj.g3appdriver.utils.Task.TaskExecutor;
@@ -30,17 +26,18 @@ import org.rmj.guanzongroup.authentication.Callback.CreateAccountCallBack;
 public class VMCreateAccount extends AndroidViewModel{
     public static final String TAG = VMCreateAccount.class.getSimpleName();
     private final Application instance;
-
-    private final iAuth poSys;
     private final ConnectionUtil poConn;
-
+    private GAuthentication poAccount;
+    private iAuthenticate poSys;
     private String message;
 
     public VMCreateAccount(@NonNull Application application) {
         super(application);
         this.instance = application;
-        this.poSys = new AccountMaster(instance).initGuanzonApp().getInstance(Auth.CREATE_ACCOUNT);
+
         this.poConn = new ConnectionUtil(instance);
+        this.poAccount = new GAuthentication(instance);
+        this.poSys = poAccount.initAppAuthentication().getInstance(Auth.CREATE_ACCOUNT);
     }
 
     public void SubmitInfo(AccountInfo accountInfo, CreateAccountCallBack callBack){
@@ -59,8 +56,7 @@ public class VMCreateAccount extends AndroidViewModel{
                     }
 
                     int lnResult = poSys.DoAction(args);
-
-                    if(lnResult == 0){
+                    if(lnResult == 0 || lnResult == 2){
                         message = poSys.getMessage();
                         return false;
                     }

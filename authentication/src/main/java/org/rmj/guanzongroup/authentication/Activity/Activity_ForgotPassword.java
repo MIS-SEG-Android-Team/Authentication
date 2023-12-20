@@ -12,7 +12,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textview.MaterialTextView;
 
-import org.rmj.g3appdriver.etc.AppConfigPreference;
+import org.rmj.g3appdriver.Config.AppVersionConfig;
 import org.rmj.g3appdriver.etc.LoadDialog;
 import org.rmj.g3appdriver.etc.MessageBox;
 import org.rmj.guanzongroup.authentication.R;
@@ -24,20 +24,22 @@ public class Activity_ForgotPassword extends AppCompatActivity implements VMForg
     private VMForgotPassword mViewModel;
     private LoadDialog poDialog;
     private MessageBox poMsgBox;
-    private AppConfigPreference poConfigx;
     private MaterialTextView lblVersion;
     private TextInputEditText tie_email;
     private MaterialButton btn_log;
     private MaterialToolbar toolbar;
+    private AppVersionConfig poAppVersion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgot_password);
 
+        mViewModel = new ViewModelProvider(this).get(VMForgotPassword.class);
+
         poDialog = new LoadDialog(this);
         poMsgBox = new MessageBox(this);
-        poConfigx = AppConfigPreference.getInstance(this);
+        poAppVersion = AppVersionConfig.getInstance(this);
 
         toolbar = findViewById(R.id.toolbar);
         lblVersion = findViewById(R.id.lbl_versionInfo);
@@ -49,15 +51,14 @@ public class Activity_ForgotPassword extends AppCompatActivity implements VMForg
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); //set back button to toolbar
         getSupportActionBar().setDisplayShowHomeEnabled(true); //enable the back button set on toolbar
 
+        lblVersion.setText(poAppVersion.getVersionName());
+
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
             }
         });
-
-        mViewModel = new ViewModelProvider(this).get(VMForgotPassword.class);
-        lblVersion.setText(poConfigx.getVersionInfo());
 
         btn_log.setOnClickListener(new View.OnClickListener() {
             @Override

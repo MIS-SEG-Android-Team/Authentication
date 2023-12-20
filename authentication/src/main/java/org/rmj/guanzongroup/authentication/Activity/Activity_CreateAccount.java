@@ -11,10 +11,11 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textview.MaterialTextView;
 
-import org.rmj.g3appdriver.etc.AppConfigPreference;
+import org.rmj.g3appdriver.Config.AppConfig;
+import org.rmj.g3appdriver.Config.AppVersionConfig;
 import org.rmj.g3appdriver.etc.LoadDialog;
 import org.rmj.g3appdriver.etc.MessageBox;
-import org.rmj.g3appdriver.lib.Account.pojo.AccountInfo;
+import org.rmj.g3appdriver.lib.authentication.pojo.AccountInfo;
 import org.rmj.guanzongroup.authentication.R;
 import org.rmj.guanzongroup.authentication.Callback.CreateAccountCallBack;
 import org.rmj.guanzongroup.authentication.ViewModel.VMCreateAccount;
@@ -25,7 +26,8 @@ public class Activity_CreateAccount extends AppCompatActivity implements CreateA
     private VMCreateAccount mViewModel;
     private LoadDialog dialog;
     private MessageBox loMessage;
-    private AppConfigPreference poConfigx;
+    private AppConfig poConfigx;
+    private AppVersionConfig poAppVersion;
     private TextInputEditText tieLastname, tieFirstname, tieMiddname,  tieEmail, tiePassword, tiecPassword, tieMobileno;
     private MaterialTextView lbl_versionInfo;
     private MaterialButton btn_createAccount;
@@ -39,7 +41,8 @@ public class Activity_CreateAccount extends AppCompatActivity implements CreateA
         mViewModel = new ViewModelProvider(this).get(VMCreateAccount.class);
         loMessage = new MessageBox(this);
         dialog = new LoadDialog(this);
-        poConfigx = AppConfigPreference.getInstance(this);
+        poConfigx = AppConfig.getInstance(this);
+        poAppVersion = AppVersionConfig.getInstance(this);
 
         toolbar = findViewById(R.id.toolbar);
         tieLastname = findViewById(R.id.lastname);
@@ -57,6 +60,8 @@ public class Activity_CreateAccount extends AppCompatActivity implements CreateA
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); //set back button to toolbar
         getSupportActionBar().setDisplayShowHomeEnabled(true); //enable the back button set on toolbar
 
+        lbl_versionInfo.setText(poAppVersion.getVersionName());
+
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,7 +69,6 @@ public class Activity_CreateAccount extends AppCompatActivity implements CreateA
             }
         });
 
-        lbl_versionInfo.setText(poConfigx.getVersionInfo());
         btn_createAccount.setOnClickListener(view -> {
             AccountInfo accountInfo = new AccountInfo();
             accountInfo.setLastName(Objects.requireNonNull(tieLastname.getText()).toString());
@@ -74,6 +78,7 @@ public class Activity_CreateAccount extends AppCompatActivity implements CreateA
             accountInfo.setPassword(Objects.requireNonNull(tiePassword.getText()).toString());
             accountInfo.setcPasswrd(Objects.requireNonNull(tiecPassword.getText()).toString());
             accountInfo.setMobileNo(Objects.requireNonNull(tieMobileno.getText()).toString());
+
             mViewModel.SubmitInfo(accountInfo, Activity_CreateAccount.this);
         });
 
@@ -101,7 +106,7 @@ public class Activity_CreateAccount extends AppCompatActivity implements CreateA
         loMessage.initDialog();
         loMessage.setTitle("Create Account");
         loMessage.setMessage(message);
-        loMessage.setPositiveButton("Okay", (view, msgDialog) -> msgDialog.dismiss());
+        loMessage.setPositiveButton("Dismiss", (view, msgDialog) -> msgDialog.dismiss());
         loMessage.show();
     }
 }
